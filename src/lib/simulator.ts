@@ -5,7 +5,7 @@
  * the UI renders a "SIMULATED DATA" badge. Set the simulator OFF (Settings >
  * Data source) before connecting real ESP32-S3 hardware.
  */
-import { eq, inArray, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { helmets, sensorReadings, systemState, workers } from "@/db/schema";
 import { ingestReading } from "@/lib/safety/engine";
@@ -236,6 +236,6 @@ export async function simulatorStatus() {
 }
 
 export async function helmetCodes(): Promise<string[]> {
-  const rows = await db.select({ code: helmets.code }).from(helmets).where(inArray(helmets.active, [true]));
+  const rows = await db.select({ code: helmets.code }).from(helmets).where(eq(helmets.active, true));
   return rows.map((r) => r.code);
 }
